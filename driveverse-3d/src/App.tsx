@@ -1,35 +1,24 @@
-import { Suspense, useEffect, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import { CarModel } from './three/CarModel';
-
-type Theme = 'dark' | 'light';
+import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Stars } from "@react-three/drei";
+import { Planet } from "./three/Planet";
+import { Atmosphere } from "./three/Atmosphere";
 
 function App() {
-  const [theme, setTheme] = useState<Theme>('dark');
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
   return (
     <div className="app">
-      <button
-        style={{ position: 'absolute', top: 20, right: 20, zIndex: 10 }}
-        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      >
-        Toggle theme
-      </button>
+      <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
+        <ambientLight intensity={0.4} />
+        <directionalLight position={[5, 3, 5]} intensity={1.5} />
 
-      <Canvas camera={{ position: [3, 3, 3], fov: 50 }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} intensity={1} />
+        <Stars radius={100} depth={50} count={4000} factor={4} saturation={0} fade speed={0.5} />
 
         <Suspense fallback={null}>
-          <CarModel />
+          <Planet />
+          <Atmosphere color="#5fdde0" />
         </Suspense>
 
-        <OrbitControls />
+        <OrbitControls enablePan={false} minDistance={2.5} maxDistance={8} />
       </Canvas>
     </div>
   );
