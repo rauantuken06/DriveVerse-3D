@@ -22,6 +22,22 @@ export const company = {
   systemAvailability: 99.94, // %
 }
 
+/**
+ * YoY deltas for the Overview metrics grid (Phase 6). Deliberately
+ * omitted for `activeProjects` (a snapshot count, not a trend) and
+ * `systemAvailability` (already near-ceiling). `customerSatisfaction`'s
+ * -1.8% is the same softening the Customer Experience department shows
+ * in `data/departmentMetrics.ts` — same story, two places.
+ */
+export const companyDeltas = {
+  annualRevenue: 6.1,
+  ebitda: 4.8,
+  employees: 3.2,
+  customers: 9.7,
+  operationalEfficiency: 1.4,
+  customerSatisfaction: -1.8,
+}
+
 export interface LiveInsight {
   title: string
   detail: string

@@ -72,3 +72,14 @@ export interface DepartmentDetail {
   trend: number
 }
 
+// ---------------------------------------------------------------------
+// Camera system (Phase 5+)
+// ---------------------------------------------------------------------
+
+/** Named camera framings the 3D scene can be driven to — by clicking a
+ * department, or later by CEO Mode, the AI layer, Simulation and risk
+ * propagation (Phases 7, 9, 10, 11). `three/CameraRig` is what actually
+ * flies the camera between these; `three/cameraTargets` resolves a
+ * state into a concrete position/lookAt. */
+export type CameraState = 'overview' | 'department' | 'risk' | 'simulation' | 'executive'
+

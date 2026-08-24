@@ -5,7 +5,9 @@ import { MeshStandardMaterial, type Group, type Mesh } from 'three'
 import type { Department } from '@/types'
 import { statusStyle } from '@/utils/status'
 import { useSceneStore } from '@/store/sceneStore'
+import { useCeoModeStore } from '@/store/ceoModeStore'
 import { DEPARTMENT_METRICS } from '@/data/departmentMetrics'
+import { EXECUTIVE_DEPARTMENT_IDS } from '@/data/executiveIssues'
 import { GlassPanel } from '@/ui/GlassPanel'
 import { MetricTile } from '@/ui/MetricTile'
 import { lerp } from '@/utils/format'
@@ -28,11 +30,19 @@ export function DepartmentNode({ department }: DepartmentNodeProps) {
   const selectedId = useSceneStore((s) => s.selectedId)
   const setHovered = useSceneStore((s) => s.setHovered)
   const selectDepartment = useSceneStore((s) => s.selectDepartment)
+  const ceoModeActive = useCeoModeStore((s) => s.active)
 
   const isHovered = hoveredId === department.id
   const isSelected = selectedId === department.id
-  const isFocused = isHovered || isSelected
-  const isDimmed = (hoveredId !== null || selectedId !== null) && !isFocused
+  const isExecutiveFocus = EXECUTIVE_DEPARTMENT_IDS.has(department.id)
+
+  // CEO Mode overrides hover/selection entirely — while it's active,
+  // focus/dim is decided purely by "is this one of the three flagged
+  // departments" (spec section 7), not by the cursor.
+  const isFocused = ceoModeActive ? isExecutiveFocus : isHovered || isSelected
+  const isDimmed = ceoModeActive
+    ? !isExecutiveFocus
+    : (hoveredId !== null || selectedId !== null) && !isFocused
 
   const style = useMemo(() => statusStyle(department.status), [department.status])
   const detail = DEPARTMENT_METRICS[department.id]
@@ -126,7 +136,7 @@ export function DepartmentNode({ department }: DepartmentNodeProps) {
         style={{ pointerEvents: 'none' }}
       >
         <div
-          className="flex flex-col items-center gap-1 whitespace-nowrap transition-opasity duration-200"
+          className="flex flex-col items-center gap-1 whitespace-nowrap transition-opacity duration-200"
           style={{ opacity: isDimmed ? 0.35 : 1 }}
         >
           <span
@@ -139,7 +149,7 @@ export function DepartmentNode({ department }: DepartmentNodeProps) {
         </div>    
       </Html>
 
-      {isHovered && !isSelected && detail && (
+      {isHovered && !isSelected && (!ceoModeActive || isExecutiveFocus) && detail && (
         <Html
           center
           distanceFactor={11}

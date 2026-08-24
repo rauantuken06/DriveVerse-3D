@@ -2,6 +2,8 @@ import { TopNav } from '@/components/TopNav'
 import { IntelligencePanel } from '@/components/IntelligencePanel'
 import { AICommandBar } from '@/components/AICommandBar'
 import { DepartmentView } from '@/components/DepartmentView'
+import { MetricsDashboard } from '@/components/MetricsDashboard'
+import { ExecutiveAttentionPanel } from '@/components/ExecutiveAttentionPanel'
 import { Scene } from '@/three/Scene'
 
 /**
@@ -20,11 +22,10 @@ export function AppShell() {
           <Scene />
         </div>
 
+        <MetricsDashboard />
+        <ExecutiveAttentionPanel />
         <DepartmentView />
-
-        <div className="absolute top-6 right-6">
-          <IntelligencePanel />
-        </div>
+        <IntelligencePanel />
 
         <AICommandBar />
       </main>

@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
 import { CorporateWorld } from '@/three/CorporateWorld'
+import { CameraRig } from '@/three/CameraRig'
 import { useSceneStore } from '@/store/sceneStore'
 
 /**
@@ -31,17 +31,7 @@ export function Scene() {
         <CorporateWorld />
       </Suspense>
 
-      {/* Temporary free-look camera for building/inspecting the scene.
-          Phase 5 replaces this with a scripted CameraRig driven by
-          store state (overview/department/risk/simulation/executive). */}
-      <OrbitControls
-        enablePan={false}
-        minDistance={9}
-        maxDistance={28}
-        maxPolarAngle={Math.PI / 2.05}
-        enableDamping
-        dampingFactor={0.08}
-      />
+      <CameraRig />
     </Canvas>
   )
 }

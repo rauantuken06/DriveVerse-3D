@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion'
+import { Crosshair } from 'lucide-react'
 import { useUIStore } from '@/store/uiStore'
+import { useCeoModeStore } from '@/store/ceoModeStore'
 import { useLiveSyncLabel } from '@/hooks/useLiveSyncLabel'
 import { PrismMark } from '@/ui/PrismMark'
 import { LiveBadge } from '@/ui/Badge'
+import { Button } from '@/ui/Button'
 import { cn } from '@/utils/cn'
 import type { NavSection } from '@/types'
 
@@ -23,6 +26,8 @@ const NAV_ITEMS: Array<{ id: NavSection; label: string }> = [
 export function TopNav() {
   const activeSection = useUIStore((s) => s.activeSection)
   const setActiveSection = useUIStore((s) => s.setActiveSection)
+  const ceoModeActive = useCeoModeStore((s) => s.active)
+  const toggleCeoMode = useCeoModeStore((s) => s.toggle)
   const syncLabel = useLiveSyncLabel()
 
   return (
@@ -65,6 +70,15 @@ export function TopNav() {
           Last sync <span className="text-ink-50">{syncLabel}</span>
         </span>
         <LiveBadge />
+        <Button
+          variant={ceoModeActive ? 'primary' : 'outline'}
+          size="sm"
+          onClick={toggleCeoMode}
+          className="flex items-center gap-1.5"
+        >
+          <Crosshair className="h-3.5 w-3.5" />
+          CEO Mode
+        </Button>
       </div>
     </header>
   )
